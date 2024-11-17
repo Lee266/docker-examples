@@ -32,9 +32,12 @@ RUN wget -q https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
 RUN git clone --depth=1 --recurse-submodules https://github.com/google/ngx_brotli \
     && git clone --depth=1 --recurse-submodules https://github.com/tokers/zstd-nginx-module
 
-# Build ngx_brotli
-RUN cd nginx-${NGINX_VERSION} && ./configure --with-compat --add-dynamic-module=../ngx_brotli && make modules
-RUN cd nginx-${NGINX_VERSION} && ./configure --with-compat --add-dynamic-module=../zstd-nginx-module && make modules
+# Build ngx_brotli and zstd-nginx-module
+RUN cd nginx-${NGINX_VERSION} \
+    && ./configure --with-compat \
+        --add-dynamic-module=../ngx_brotli \
+        --add-dynamic-module=../zstd-nginx-module \
+    && make modules
 
 FROM nginx:latest
 
